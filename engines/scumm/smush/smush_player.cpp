@@ -44,6 +44,8 @@
 
 #include "scumm/insane/insane.h"
 
+#include "scumm/korean.h"
+
 #include "audio/audiostream.h"
 #include "audio/mixer.h"
 #include "audio/decoders/mp3.h"
@@ -627,17 +629,22 @@ void SmushPlayer::handleTextResource(uint32 subType, int32 subSize, Common::Seek
 		str = string2;
 	}
 
+	char kr_color = (color != -1) ? color : 1;
+	const char *strKorean = str;
+
 	// flags:
-	// bit 0 - center       1
-	// bit 1 - not used     2
-	// bit 2 - ???          4
+	// bit 0 - center	   1
+	// bit 1 - not used	 2
+	// bit 2 - ???		  4
 	// bit 3 - wrap around  8
 	switch (flags & 9) {
 	case 0:
-		sf->drawString(str, _dst, _width, _height, pos_x, pos_y, false);
+		if (_koreanMode) strKorean = convertToKorean(str, 0);
+		sf->drawString(strKorean, _dst, _width, _height, pos_x, pos_y, false);
 		break;
 	case 1:
-		sf->drawString(str, _dst, _width, _height, pos_x, MAX(pos_y, top), true);
+		if (_koreanMode) strKorean = convertToKorean(str, 0);
+		sf->drawString(strKorean, _dst, _width, _height, pos_x, MAX(pos_y, top), true);
 		break;
 	case 8:
 		// FIXME: Is 'right' the maximum line width here, just
@@ -645,7 +652,8 @@ void SmushPlayer::handleTextResource(uint32 subType, int32 subSize, Common::Seek
 		// in The Dig's intro, where 'left' and 'right' are
 		// always 0 and 321 respectively, and apparently we
 		// handle that correctly.
-		sf->drawStringWrap(str, _dst, _width, _height, pos_x, MAX(pos_y, top), left, right, false);
+		if (_koreanMode) strKorean = convertToKorean(str, 0);
+		sf->drawStringWrap(strKorean, _dst, _width, _height, pos_x, MAX(pos_y, top), left, right, false);
 		break;
 	case 9:
 		// In this case, the 'right' parameter is actually the
@@ -654,7 +662,8 @@ void SmushPlayer::handleTextResource(uint32 subType, int32 subSize, Common::Seek
 		//
 		// Note that in The Dig's "Spacetime Six" movie it's
 		// 621. I have no idea what that means.
-		sf->drawStringWrap(str, _dst, _width, _height, pos_x, MAX(pos_y, top), left, MIN(left + right, _width), true);
+		if (_koreanMode) strKorean = convertToKorean(str, 0);
+		sf->drawStringWrap(strKorean, _dst, _width, _height, pos_x, MAX(pos_y, top), left, MIN(left + right, _width), true);
 		break;
 	default:
 		error("SmushPlayer::handleTextResource. Not handled flags: %d", flags);
