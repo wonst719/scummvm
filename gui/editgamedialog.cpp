@@ -179,9 +179,9 @@ EditGameDialog::EditGameDialog(const String &domain)
 
 	// Korean Mode popup
 	if (g_system->getOverlayWidth() > 320)
-		_koreanModeCheckbox = new CheckboxWidget(tab, "GameOptions_Game.V1modeCheckbox", _("Use V1 Korean Mode"), 0, 0);
+		_koreanModeCheckbox = new CheckboxWidget(tab, "GameOptions_Game.V1modeCheckbox", _("Use V1 Korean Mode"), Common::U32String(""), 0, 0);
 	else
-		_koreanModeCheckbox = new CheckboxWidget(tab, "GameOptions_Game.V1modeCheckbox", _c("Use V1 Korean Mode", "lowres"), 0, 0);
+		_koreanModeCheckbox = new CheckboxWidget(tab, "GameOptions_Game.V1modeCheckbox", _c("Use V1 Korean Mode", "lowres"), Common::U32String(""), 0, 0);
 
 	//
 	// 2) The engine tab (shown only if the engine implements one or there are custom engine options)

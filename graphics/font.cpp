@@ -395,7 +395,7 @@ StringType handleEllipsis(const Font &font, const StringType &input, int w) {
 				}
 			}
 			const typename StringType::unsigned_type cur = s[i];
-			int charWidth = font.getCharWidth(c) + font.getKerningOffset(last, cur);
+			charWidth = font.getCharWidth(c) + font.getKerningOffset(last, cur);
 			if (w2 + charWidth > halfWidth) {
 				if (c > 0xff)
 					str += s[i];
