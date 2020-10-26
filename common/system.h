@@ -238,6 +238,10 @@ protected:
 	// in the osx_intel toolchain. Adding this variable fixes it.
 	bool _dummyUnused;
 
+	// WORKAROUND. The 014bef9eab9fb409cfb3ec66830e033e4aaa29a9 triggered a bug
+	// in the osx_intel toolchain. Adding this variable fixes it.
+	bool _dummyUnused;
+
 private:
 	/**
 	 * Indicate if initBackend() has been called.

@@ -45,6 +45,8 @@
 
 #include "scumm/insane/insane.h"
 
+#include "scumm/korean.h"
+
 #include "audio/audiostream.h"
 #include "audio/mixer.h"
 #include "audio/decoders/mp3.h"
@@ -630,6 +632,9 @@ void SmushPlayer::handleTextResource(uint32 subType, int32 subSize, Common::Seek
 		str = string2;
 	}
 
+	char kr_color = (color != -1) ? color : 1;
+	const char *strKorean = str;
+
 	// flags:
 	// bit 0 - center                  0x01
 	// bit 1 - not used (align right)  0x02
@@ -652,12 +657,14 @@ void SmushPlayer::handleTextResource(uint32 subType, int32 subSize, Common::Seek
 			height = _height - 20;
 		}
 		Common::Rect clipRect(MAX<int>(0, left), MAX<int>(0, top), MIN<int>(left + width, _width), MIN<int>(top + height, _height));
-		sf->drawStringWrap(str, _dst, clipRect, pos_x, pos_y, flags & 1);
+		if (_koreanMode) strKorean = convertToKorean(str, 0);
+		sf->drawStringWrap(strKorean, _dst, clipRect, pos_x, pos_y, flags & 1);
 	} else {
 		// Similiar to the wrapped text, COMI will pass on rect coords here, which will later be lost. Unlike with the wrapped text, it will
 		// finally use the full screen dimenstions. SCUMM7 renders directly from here (see comment above), but also with the full screen.
 		Common::Rect clipRect(0, 0, _width, _height);
-		sf->drawString(str, _dst, clipRect, pos_x, pos_y, flags & 1);
+		if (_koreanMode) strKorean = convertToKorean(str, 0);
+		sf->drawString(strKorean, _dst, clipRect, pos_x, pos_y, flags & 1);
 	}
 
 	free(string);

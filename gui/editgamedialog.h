@@ -92,6 +92,8 @@ protected:
 	CheckboxWidget *_globalMT32Override;
 	CheckboxWidget *_globalVolumeOverride;
 
+	CheckboxWidget *_koreanModeCheckbox;
+
 	OptionsContainerWidget *_engineOptions;
 };
 

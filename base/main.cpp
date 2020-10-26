@@ -472,6 +472,9 @@ extern "C" int scummvm_main(int argc, const char * const argv[]) {
 	// the command line params) was read.
 	system.initBackend();
 
+	// KOR
+	Graphics::loadKoreanGUIFont();
+
 	// If we received an invalid graphics mode parameter via command line
 	// we check this here. We can't do it until after the backend is inited,
 	// or there won't be a graphics manager to ask for the supported modes.
@@ -681,6 +684,10 @@ extern "C" int scummvm_main(int argc, const char * const argv[]) {
 	Cloud::CloudManager::destroy();
 #endif
 #endif
+
+	// KOR
+	Graphics::unloadKoreanGUIFont();
+
 	PluginManager::instance().unloadDetectionPlugin();
 	PluginManager::instance().unloadAllPlugins();
 	PluginManager::destroy();

@@ -27,6 +27,8 @@
 #include "common/ustr.h"
 #include "common/rect.h"
 
+#include "graphics/korfont.h"
+
 namespace Common {
 template<class T> class Array;
 }
