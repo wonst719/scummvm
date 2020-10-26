@@ -152,7 +152,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.002", 0, "930e416bec196b9703a331d81b3d66f2", 1283812},
 		{"resource.msg", 0, "71c6f480e742a0dd3700ec7825962921", 49538},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO4(GUIO_NOSPEECH, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO_STD16	},
 
 	// Castle of Dr. Brain - English DOS Floppy 1.000
 	// Reported by graxer in bug report #3037942
@@ -558,7 +558,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.000", 0, "d908dbef56816ac6c60dd145fdeafb2b", 3536046},
 		{"resource.msg", 0, "0c68a203302841adb9faa47ff61edd93", 561801},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO3(GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO_STD16_SPEECH	},
 
 	// Eco Quest - English DOS Floppy (reported by misterhands in bug #6599)
 	// Game v1.10, interpreter 2.000.286, INT #6.12.92
@@ -1464,7 +1464,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.003", 0, "fed9e0072ffd511d248674e60dee2099", 717478},
 		{"resource.msg", 0, "6f44b0324c9a3d478510d982eb5084dd", 2948975},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO4(GUIO_NOSPEECH, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO_STD16_UNDITHER	},
 
 	// King's Quest 1 SCI Remake - English DOS (supplied by ssburnout in bug report #3049193)
 	// 1.000.051 9x5.25" (label: INT#9.19.90)
@@ -1691,7 +1691,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.007", 0, "2f48faf27666b58c276dda20f91f4a93", 1240456},
 		{"resource.msg", 0, "8d94253e33b268c310126562a72de6f5", 93930},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO4(GUIO_NOSPEECH, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO_STD16	},
 
 	// King's Quest 5 - English DOS Floppy
 	// VERSION file reports "0.000.051"
@@ -2027,7 +2027,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.000", 0, "f2b7f753992c56a0c7a08d6a5077c895", 7863324},
 		{"resource.msg", 0, "51ca9f8afc42ef442f6545b3c82a9165", 596121},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO4(GUIO_NOSPEECH, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, 0, GUIO_STD16	},
 
 	// King's Quest 6 - Korean DOS CD (from the King's Quest Collection)
 	// Executable scanning reports "1.cfs.158", VERSION file reports "1.034 9/11/94 - KQ6 version 1.000.00G"
@@ -2037,7 +2037,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.000", 0, "233394a5f33b475ae5975e7e9a420865", 8376352},
 		{"resource.msg", 0, "51ca9f8afc42ef442f6545b3c82a9165", 596121},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO4(GAMEOPTION_HIGH_RESOLUTION_GRAPHICS, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO5(GAMEOPTION_HIGH_RESOLUTION_GRAPHICS, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_MIDI_MODE, GAMEOPTION_RGB_RENDERING)	},
 
 	// King's Quest 6 - Korean Windows CD (from the King's Quest Collection)
 	// Executable scanning reports "1.cfs.158", VERSION file reports "1.034 9/11/94 - KQ6 version 1.000.00G"
@@ -2047,7 +2047,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.000", 0, "233394a5f33b475ae5975e7e9a420865", 8376352},
 		{"resource.msg", 0, "51ca9f8afc42ef442f6545b3c82a9165", 596121},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformWindows, ADGF_CD, GUIO6(GUIO_NOASPECT, GAMEOPTION_HIGH_RESOLUTION_GRAPHICS, GAMEOPTION_KQ6_WINDOWS_CURSORS, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformWindows, ADGF_CD, GUIO6(GUIO_NOASPECT, GAMEOPTION_HIGH_RESOLUTION_GRAPHICS, GAMEOPTION_KQ6_WINDOWS_CURSORS, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_MIDI_MODE)	},
 
 	// King's Quest 6 - English Macintosh Floppy
 	// VERSION file reports "1.0"
@@ -2361,7 +2361,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.000", 0, "82578b8d5a7e09c4c58891ca49fae35b", 5598672},
 		{"resource.msg", 0, "bdc2167ebe55612b8ff17347f70e2b83", 561801},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO3(GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO_STD16_SPEECH	},
 
 	// Laura Bow 2 v1.1 - French DOS Floppy (from Hkz)
 	{"laurabow2", "", {
@@ -5242,7 +5242,7 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.000", 0, "63247e3901ab8963d4eece73747832e0", 5157378},
 		{"resource.msg", 0, "6ca82305ba1f8ac1cebdd20427168106", 561801},
 		AD_LISTEND},
-		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO4(GAMEOPTION_SQ4_SILVER_CURSORS, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_FB01_MIDI)	},
+		Common::KO_KOR, Common::kPlatformDOS, ADGF_CD, GUIO5(GAMEOPTION_SQ4_SILVER_CURSORS, GAMEOPTION_PREFER_DIGITAL_SFX, GAMEOPTION_ORIGINAL_SAVELOAD, GAMEOPTION_MIDI_MODE, GAMEOPTION_RGB_RENDERING)	},
 
 	// Space Quest 4 - English DOS CD "NRS SQ4 Update 1.2" (unofficial patch)
 	// This patch set was distributed as a mixture the CD and floppy versions (the whole game)
