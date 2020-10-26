@@ -1116,11 +1116,11 @@
 						type = 'PopUp'
 				/>
 			</layout>
-			<layout type = 'horizontal' padding = '0, 0, 0, 0' spacing = '10' center = 'true'>
+			<layout type = 'horizontal' padding = '0, 0, 0, 0' spacing = '10' align = 'center'>
 				<widget name = 'V1modeCheckbox'
 						type = 'Checkbox'
 				/>
-   	        </layout>
+			</layout>
 		</layout>
 	</dialog>
 

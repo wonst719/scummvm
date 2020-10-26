@@ -1127,7 +1127,7 @@
 				/>
 			</layout>
 			<space size = '4'/>
-			<layout type = 'horizontal' padding = '0, 0, 0, 0' spacing = '6' center = 'true'>
+			<layout type = 'horizontal' padding = '0, 0, 0, 0' spacing = '6' align = 'center'>
 				<widget name = 'V1modeCheckbox'
 						type = 'Checkbox'
 				/>
