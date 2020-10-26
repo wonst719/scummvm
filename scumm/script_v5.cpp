@@ -559,6 +559,22 @@ void ScummEngine_v5::o5_add() {
 	getResultPos();
 	a = getVarOrDirectWord(PARAM_1);
 
+	// WORKAROUND: 한글의 사이즈가 크기 때문에 대사 선택문의 위치를 고쳐야
+	// 하는데, 스크립트에서 (Var[&&&] += 8) 부분을 모두 고쳐야 하기 때문에
+	// (수천개는 될 거야!) 여기서 대신 보정한다.
+	// FIXME: version 5 게임에 모두 적용
+	if(_useCJKMode) {
+		if(_gameId == GID_MONKEY2 && _resultVarNumber == 176 && a == 8) {
+			a = _2byteHeight + 1;
+		}
+		if(_gameId == GID_MONKEY_VGA && _resultVarNumber == 228 && a == 8) {
+			a = _2byteHeight + 1;
+		}
+		if(_gameId == GID_MONKEY && _resultVarNumber == 229 && a == 8) {
+			a = _2byteHeight + 1;
+		}
+	}
+
 	// WORKAROUND bug #770065: This works around a script bug in LoomCD. To
 	// understand the reasoning behind this, compare script 210 and 218 in
 	// room 20. Apparently they made a mistake when converting the absolute
@@ -2399,6 +2415,32 @@ void ScummEngine_v5::o5_verbOps() {
 		case 5:		// SO_VERB_AT
 			vs->curRect.left = getVarOrDirectWord(PARAM_1);
 			vs->curRect.top = getVarOrDirectWord(PARAM_2);
+
+#if 0
+			// WORKAROUND: 한글판 MI1VGA(EGA) 보정
+			if (_gameId == GID_MONKEY_VGA || _gameId == GID_MONKEY_EGA && _useCJKMode) {
+				if ((verb > 0) && (verb < 14) || (verb > 17) && (verb < 30)) {
+					switch(vs->curRect.top) {
+					case 153:
+						vs->curRect.top++;
+						break;
+					case 162:
+						vs->curRect.top += 2;
+						break;
+					case 171:
+						vs->curRect.top += 3;
+						break;
+					case 180:
+						vs->curRect.top += 4;
+						break;
+					}
+				}
+/*				if ((verb > 100) && (verb < 107)) {
+					vs->curRect.top += (verb - 100);
+				}*/
+			}
+#endif
+
 			// Macintosh verison of indy3ega used different interface, so adjust values.
 			if ((_platform == Common::kPlatformMacintosh) && (_gameId == GID_INDY3)) {
 				switch (verb) {

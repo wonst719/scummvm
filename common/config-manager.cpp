@@ -41,14 +41,14 @@ DECLARE_SINGLETON(Common::ConfigManager);
 #define MAXLINELEN 256
 
 static char *ltrim(char *t) {
-	while (isspace(*t))
+	while (isspace(*t) && !(*t & 0x80))
 		t++;
 	return t;
 }
 
 static char *rtrim(char *t) {
 	int l = strlen(t) - 1;
-	while (l >= 0 && isspace(t[l]))
+	while (l >= 0 && isspace(t[l]) && !(t[l] & 0x80))
 		t[l--] = 0;
 	return t;
 }
@@ -207,7 +207,7 @@ void ConfigManager::loadFile(const String &filename) {
 				String key = rtrim(t);
 				String value = ltrim(p + 1);
 				set(key, value, domain);
-//printf("key : %s | %s\n");
+				//printf("key : %s | %s\n", key.c_str(), value.c_str());
 				// Store comment
 				if (_globalDomains.contains(domain)) {
 					_globalDomains[domain].setKVComment(key, comment);

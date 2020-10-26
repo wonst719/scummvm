@@ -72,6 +72,7 @@ Indiana Jones and the Last Crusade
 	EGA Demo	DOS	en	b597e0403cc0002f69170e6caba7edd9	indy3
 
 	VGA	DOS	All	1875b90fade138c9253a8e967007031a	indy3
+	VGA	DOS	kr	cb8feea195746e042368e2b738766d8b	indy3
 	VGA	DOS	de	399b217b0c8d65d0398076da486363a9	indy3
 	VGA	DOS	it	17b5d5e6af4ae89d62631641d66d5a05	indy3	Andrea Petrucci
 	VGA	DOS	ru	3cce1913a3bc586b51a75c3892ff18dd	indy3
@@ -99,6 +100,7 @@ Loom
 	Floppy	Atari	de	c24c490373aeb48fbd54caa8e7ae376d	loom	Andreas Bylund
 	Floppy	Atari	fr	0e9b01430e31d9fcd94071d433bbc6bf	loom
 	Talkie/CD	DOS	en	5d88b9d6a88e6f8e90cded9d01b7f082	loom
+	Talkie/CD	DOS	kr	4efa7da3db77654ef966ac802b196f12	loom
 	FM-TOWNS	FM-TOWNS	en	c5d10e190d4b4d59114b824f2fdbd00e	loom	dhewg, Andrea Petrucci
 	FM-TOWNS	FM-TOWNS	jp	31b8fda4c8c7413fa6b39997e776eba4	loom	khalek, Andrea Petrucci
 
@@ -121,6 +123,7 @@ The Secret of Monkey Island
 
 	VGA (8 disk)	DOS	en	c7890e038806df2bb5c0c8c6f1986ea2	monkey	Andrea Petrucci
 	VGA (4 disk)	DOS	en	15e03ffbfeddb9c2aebc13dcb2a4a8f4	monkey
+	VGA (4 disk)/DUMB v0.4.0	DOS	kr	2b3744585bc6815ec55dd09f655b7a5b	monkey
 	VGA (V1.1)	DOS	en	08646dd9698ddf1023ba9bf8a195e37b	monkey	crossbow777
 	VGA (4 disk)	DOS	de	d0b531227a27c6662018d2bd05aac52a	monkey
 	VGA (4 disk)	DOS	es	45152f7cf2ba8f43cf8a8ea2e740ae09	monkey
@@ -134,6 +137,7 @@ The Secret of Monkey Island
 	VGA Demo	Amiga	en	54a936ad06161ff7bfefcb96200f7bff	monkey	khalek
 
 	CD	DOS	en	2d1e891fe52df707c30185e52c50cd92	monkey
+	CD/DUMB v0.4.0	DOS	kr	60c7b33000059b44465b2ce104a52285	monkey
 	CD	DOS	de	305d3dd57c96c65b017bc70c8c7cfb5e	monkey
 	CD	DOS	es	f049e38c1f8302b5db6170f1872af89a	monkey	Andrej Sinicyn, Andrea Petrucci
 	CD	DOS	it	da6269b18fcb08189c0aa9c95533cce2	monkey	Andrej Sinicyn, Andrea Petrucci
@@ -160,6 +164,7 @@ Monkey Island 2: LeChuck's revenge
 	-	Mac	en	4cb9c3618f71668f8e4346c8f323fa82	monkey2
 	- (alt?)	Mac	en	e246e02db9630533a40d99c9f54a8e01	monkey2	Lars N&aelig;sbye Christensen
 	-	DOS	en	3686cf8f89e102ececf4366e1d2c8126	monkey2
+	DUMB v0.1.0	DOS	kr	a95baf7746f1be4985ad42126993a744	monkey2
 	-	DOS	de	6886e5d08cee329b1f2e743ae2e3ceed	monkey2
 	-	DOS	fr	8e4ee4db46954bfe2912e259a16fad82	monkey2	Nicolas Sauz&egrave;de, Andrea Petrucci
 	CD	DOS	it	69ea626f1f87eecb78ea0d6c6b983a1d	monkey2	Andrea Petrucci
@@ -240,6 +245,7 @@ Sam &amp; Max
 Full Throttle
 	Version A	All?	en	09820417db26687bb7fe0c83cc4c553b	ft
 	Version B	All?	en	60ba818dc3bede86d40357e3913f8505	ft	sev
+	Korean	All?	kr	0961ba1ff2ae245710446efb4ccb7117	ft
 
 	-	All?	de	8bdb0bf87b5e303dd35693afb9351215	ft	dhewg
 	-	All?	es	e72bb4c2b613db2cf50f89ff6350e70a	ft

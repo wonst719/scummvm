@@ -23,7 +23,12 @@
 
 namespace Graphics {
 
-int NewFont::getCharWidth(byte chr) const {
+int NewFont::getCharWidth(uint16 chr) const {
+#ifndef __GP32__
+	if(chr > 0xff)
+		return getKorFontWidth();
+#endif
+
 	// If no width table is specified, return the maximum width
 	if (!desc.width)
 		return desc.maxwidth;
@@ -34,7 +39,14 @@ int NewFont::getCharWidth(byte chr) const {
 	return desc.width[chr - desc.firstchar];
 }
 
-void NewFont::drawChar(Surface *dst, byte chr, int tx, int ty, uint32 color) const {
+void NewFont::drawChar(Surface *dst, uint16 chr, int tx, int ty, uint32 color) const {
+#ifndef __GP32__
+	if(chr > 0xff) {
+		drawKorChar(dst, chr, tx, ty, color);
+		return;
+	}
+#endif
+
 	assert(dst != 0);
 	byte *ptr = (byte *)dst->getBasePtr(tx, ty);
 
@@ -76,8 +88,24 @@ void NewFont::drawChar(Surface *dst, byte chr, int tx, int ty, uint32 color) con
 int Font::getStringWidth(const Common::String &str) const {
 	int space = 0;
 
-	for (uint i = 0; i < str.size(); ++i)
-		space += getCharWidth(str[i]);
+	bool isKorean = 1;
+
+	for (uint i = 0; i < str.size(); ++i) {
+		uint16 c;
+		c = str[i];
+#ifndef __GP32__
+		if(c >= 0x80 && isKorean) {
+			if(checkKorCode(c, str[i + 1])) {
+				c += str[i + 1] * 256; //LE
+				i++;
+			} else {
+				// 한글 판별에 한 번 실패했을 경우, 그 문장은 한글이 아닌 것으로 간주한다.
+				isKorean = 0;
+			}
+		}
+#endif
+		space += getCharWidth(c);
+	}
 	return space;
 }
 
@@ -87,6 +115,8 @@ void Font::drawString(Surface *dst, const Common::String &s, int x, int y, int w
 	uint i;
 	int width = getStringWidth(s);
 	Common::String str;
+
+	bool isKorean = 1;
 
 	if (useEllipsis && width > w) {
 		// String is too wide. So we shorten it "intellegently", by replacing
@@ -103,9 +133,29 @@ void Font::drawString(Surface *dst, const Common::String &s, int x, int y, int w
 		int w2 = 0;
 
 		for (i = 0; i < s.size(); ++i) {
-			int charWidth = getCharWidth(s[i]);
-			if (w2 + charWidth > halfWidth)
+			int charWidth = 0;
+
+			uint16 c;
+			c = s[i];
+#ifndef __GP32__
+			if(c >= 0x80 && isKorean) {
+				if(checkKorCode(c, str[i + 1])) {
+					c += s[i + 1] * 256; //LE
+					str += s[i]; // 한글을 한 글자씩 넣어 준다. 밑에 있는 것과 동일 효과
+					i++;
+				} else {
+					// 한글 판별에 한 번 실패했을 경우, 그 문장은 한글이 아닌 것으로 간주한다.
+					isKorean = 0;
+				}
+			}
+#endif
+			charWidth = getCharWidth(c);
+			if (w2 + charWidth > halfWidth) {
+				if(c > 0xff) {
+					str += s[i];
+				}
 				break;
+			}
 			w2 += charWidth;
 			str += s[i];
 		}
@@ -121,7 +171,20 @@ void Font::drawString(Surface *dst, const Common::String &s, int x, int y, int w
 		// (width + ellipsisWidth - w)
 		int skip = width + ellipsisWidth - w;
 		for (; i < s.size() && skip > 0; ++i) {
-			skip -= getCharWidth(s[i]);
+			uint16 c;
+			c = s[i];
+#ifndef __GP32__
+			if(c >= 0x80 && isKorean) {
+				if(checkKorCode(c, str[i + 1])) {
+					c += s[i + 1] * 256; //LE
+					i++;
+				} else {
+					// 한글 판별에 한 번 실패했을 경우, 그 문장은 한글이 아닌 것으로 간주한다.
+					isKorean = 0;
+				}
+			}
+#endif
+			skip -= getCharWidth(c);
 		}
 
 		// Append the remaining chars, if any
@@ -141,12 +204,27 @@ void Font::drawString(Surface *dst, const Common::String &s, int x, int y, int w
 		x = x + w - width;
 	x += deltax;
 
+//	printf("str: %s\n", str.c_str());
+
 	for (i = 0; i < str.size(); ++i) {
-		w = getCharWidth(str[i]);
+		uint16 c;
+		c = str[i];
+#ifndef __GP32__
+		if(c >= 0x80 && isKorean) {
+			if(checkKorCode(c, str[i + 1])) {
+				c += s[i + 1] * 256; //LE
+				i++;
+			} else {
+				// 한글 판별에 한 번 실패했을 경우, 그 문장은 한글이 아닌 것으로 간주한다.
+				isKorean = 0;
+			}
+		}
+#endif
+		w = getCharWidth(c);
 		if (x+w > rightX)
 			break;
 		if (x >= leftX)
-			drawChar(dst, str[i], x, y, color);
+			drawChar(dst, c, x, y, color);
 		x += w;
 	}
 }

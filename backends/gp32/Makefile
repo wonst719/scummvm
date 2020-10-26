@@ -137,7 +137,7 @@ OBJS	+= 	backends/gp32/gp32_main.o \
 					#$(EXECUTE_TOOL) $(BIN)
 
 $(FXE): $(BIN)
-					$(FXETOOL) -f -a "The ScummVM Team" -t "ScummVM for the GP32" $< $@
+					$(FXETOOL) -f -a "The ScummVM Team" -t "ScummVM Kor. for the GP32" $< $@
 #					$(FXETOOL) -f -a "The ScummVM Team" -t "ScummVM for the GP32" -b scummvm.bmp $< $@
 
 $(BIN): scummvm$(EXEEXT)

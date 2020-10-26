@@ -80,6 +80,7 @@ ScummDebugger::ScummDebugger(ScummEngine *s)
 	DVar_Register("scumm_room", &_vm->_currentRoom, DVAR_BYTE, 0);
 	DVar_Register("scumm_roomresource", &_vm->_roomResource, DVAR_INT, 0);
 	DVar_Register("scumm_vars", &_vm->_scummVars, DVAR_INTARRAY, _vm->_numVariables);
+	DVar_Register("scumm_bits", &_vm->_bitVars, DVAR_BITARRAY, _vm->_numBitVariables);
 
 	DVar_Register("scumm_gamename", &_vm->_targetName, DVAR_STRING, 0);
 	DVar_Register("scumm_exename", &_vm->_gameName, DVAR_STRING, 0);

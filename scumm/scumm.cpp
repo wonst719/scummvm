@@ -65,6 +65,8 @@
 #include "sound/mididrv.h"
 #include "sound/mixer.h"
 
+#include "scumm/korean.h"
+
 #ifdef MACOSX
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -446,6 +448,8 @@ static const ScummGameSettings multiple_versions_md5_settings[] = {
 	{"f1b0e0d587b85052de5534a3847e68fe", "Freddi Fish and Luther's Water Worries (Updated)", GID_WATER, 6, 99, MDT_NONE,
 	 GF_USE_KEY | GF_NEW_COSTUMES, Common::kPlatformWindows},
 
+	{"0961ba1ff2ae245710446efb4ccb7117", "Full Throttle (ÇÑ±ÛÆÇ v0.6)", GID_FT, 7, 0, MDT_NONE,
+	 GF_NEW_COSTUMES | GF_NEW_CAMERA | GF_DIGI_IMUSE, Common::kPlatformPC},
 	{"9d7b67be003fea60be4dcbd193611936", "Full Throttle (Mac Demo)", GID_FT, 7, 0, MDT_NONE,
 	 GF_NEW_COSTUMES | GF_NEW_CAMERA | GF_DIGI_IMUSE | GF_DEMO, Common::kPlatformMacintosh},
 	{"32a433dea56b86a55b59e4ff7d755711", "Full Throttle (PC Demo)", GID_FT, 7, 0, MDT_NONE,
@@ -459,6 +463,8 @@ static const ScummGameSettings multiple_versions_md5_settings[] = {
 	 GF_SMALL_HEADER | GF_NO_SCALING | GF_16COLOR | GF_USE_KEY | GF_OLD_BUNDLE, Common::kPlatformMacintosh},
 
 	{"1875b90fade138c9253a8e967007031a", "Indiana Jones and the Last Crusade (VGA)", GID_INDY3, 3, 0, MDT_PCSPK | MDT_ADLIB,
+	 GF_SMALL_HEADER | GF_NO_SCALING | GF_OLD256 | GF_FEW_LOCALS, Common::kPlatformPC},
+	{"cb8feea195746e042368e2b738766d8b", "Indiana Jones and the Last Crusade (VGA ÇÑ±ÛÆÇ)", GID_INDY3, 3, 0, MDT_PCSPK | MDT_ADLIB,
 	 GF_SMALL_HEADER | GF_NO_SCALING | GF_OLD256 | GF_FEW_LOCALS, Common::kPlatformPC},
 	{"399b217b0c8d65d0398076da486363a9", "Indiana Jones and the Last Crusade (VGA De)", GID_INDY3, 3, 0, MDT_PCSPK | MDT_ADLIB,
 	 GF_SMALL_HEADER | GF_NO_SCALING | GF_OLD256 | GF_FEW_LOCALS, Common::kPlatformPC},
@@ -492,6 +498,8 @@ static const ScummGameSettings multiple_versions_md5_settings[] = {
 	 GF_SMALL_HEADER | GF_NO_SCALING | GF_16COLOR | GF_USE_KEY | GF_OLD_BUNDLE, Common::kPlatformMacintosh},
 
 	{"5d88b9d6a88e6f8e90cded9d01b7f082", "Loom (256 color CD version)", GID_LOOM256, 4, 0, MDT_NONE,
+	 GF_SMALL_HEADER | GF_USE_KEY | GF_AUDIOTRACKS, Common::kPlatformPC},
+	{"4efa7da3db77654ef966ac802b196f12", "Loom (256»ö CD ¹öÀü ÇÑ±ÛÆÇ)", GID_LOOM256, 4, 0, MDT_NONE,
 	 GF_SMALL_HEADER | GF_USE_KEY | GF_AUDIOTRACKS, Common::kPlatformPC},
 	{"c5d10e190d4b4d59114b824f2fdbd00e", "Loom (FM-TOWNS)", GID_LOOM, 3, 0, MDT_TOWNS,
 	 GF_SMALL_HEADER | GF_NO_SCALING | GF_OLD256 | GF_AUDIOTRACKS, Common::kPlatformFMTowns},
@@ -622,6 +630,8 @@ static const ScummGameSettings multiple_versions_md5_settings[] = {
 	 GF_SMALL_HEADER | GF_USE_KEY | GF_16COLOR, Common::kPlatformPC},
 
 	{"2d1e891fe52df707c30185e52c50cd92", "Monkey Island 1 (CD)", GID_MONKEY, 5, 0, /*MDT_PCSPK |*/ MDT_ADLIB,
+	 GF_USE_KEY | GF_AUDIOTRACKS, Common::kPlatformPC},
+	{"60c7b33000059b44465b2ce104a52285", "Monkey Island 1 (DUMB ÇÑ±ÛÆÇ / CD)", GID_MONKEY, 5, 0, /*MDT_PCSPK |*/ MDT_ADLIB,
 	 GF_USE_KEY | GF_AUDIOTRACKS, Common::kPlatformPC},
 	{"305d3dd57c96c65b017bc70c8c7cfb5e", "Monkey Island 1 (CD De)", GID_MONKEY, 5, 0, /*MDT_PCSPK |*/ MDT_ADLIB,
 	 GF_USE_KEY | GF_AUDIOTRACKS, Common::kPlatformPC},
@@ -851,8 +861,8 @@ static SubstResFileNames substResFileNameTable[] = {
 	{ "putttime", "TimeDemo", kGenMac },
 	{ "putttime", "TEMPDEMO", kGenPC },
 	{ "putttime", "Tempdemo", kGenMac }, // FR Mac demo
-	{ "putttime", "toffzeit", kGenPC }, // German T’¨¢öff-T’¨¢öff: Reist durch die Zeit
-	{ "putttime", "toffzeit", kGenMac }, // German T’¨¢öff-T’¨¢öff: Reist durch die Zeit
+	{ "putttime", "toffzeit", kGenPC }, // German T’¨?ff-T’¨?ff: Reist durch die Zeit
+	{ "putttime", "toffzeit", kGenMac }, // German T’¨?ff-T’¨?ff: Reist durch die Zeit
 	{ "puttzoo", "Puttzoo Demo", kGenMac },
 	{ "puttzoo", "PuttZoo", kGenMac },
 	{ "puttzoo", "zoodemo", kGenPC },
@@ -1196,6 +1206,8 @@ ScummEngine::ScummEngine(GameDetector *detector, OSystem *syst, const ScummGameS
 	_costumeLoader = NULL;
 	_costumeRenderer = NULL;
 	_2byteFontPtr = 0;
+	for(int i = 0; i < 20; i++)
+		_2byteMultiFontPtr[i] = NULL;
 	_V1TalkingActor = 0;
 	_NESStartStrip = 0;
 
@@ -1457,7 +1469,12 @@ ScummEngine::~ScummEngine() {
 	delete [] _actors;
 	delete [] _sortedActors;
 
-	delete _2byteFontPtr;
+	unloadKoreanFiles();
+	if(_2byteFontPtr)
+		delete _2byteFontPtr;
+	for(int i = 0; i < 20; i++)
+		if(_2byteMultiFontPtr[i])
+			delete _2byteMultiFontPtr[i];
 	delete _charset;
 	delete _pauseDialog;
 	delete _mainMenuDialog;
@@ -1685,6 +1702,33 @@ int ScummEngine::init(GameDetector &detector) {
 
 	// Load CJK font, if present
 	loadCJKFont();
+
+	// °³¼±ÀÇ ¿©Áö°¡ ¾à°£ ÀÖÁö¸¸, ÀÏ´ÜÀº ±×´ë·Î ³²°Ü µÓ½Ã´Ù.
+	_koreanMode = 0;
+	_koreanOnly = 0;
+	_highRes = 0;
+
+	if(_language == Common::KO_KOR) {
+		_koreanMode = ConfMan.getBool("v1_korean_mode");
+		_koreanOnly = ConfMan.getBool("v1_korean_only") && _koreanMode;
+		if(_version == 8 || _heversion > 72 && _koreanMode)
+			_highRes = true;
+		if(_gameId == GID_DIG || _gameId == GID_CMI && _koreanMode) {
+			warning("V1 ½Ã½ºÅÛÀ» »ç¿ëÇÒ ¼ö ¾ø´Â °ÔÀÓÀÔ´Ï´Ù");
+			_koreanMode = 0;
+			_koreanOnly = 0;
+			_highRes = 0;
+		}
+		if(_koreanMode) {
+			printf("V1 ½Ã½ºÅÛÀ» »ç¿ëÇÕ´Ï´Ù.\n");
+			loadKoreanFiles(getGameName());
+			_useCJKMode = 0; // V1°ú V2¸¦ µ¿½Ã¿¡ »ç¿ëÇÏÁö´Â ¾Ê´Â´Ù.
+		} else {
+			if(_useCJKMode) {
+				printf("V2 ½Ã½ºÅÛÀ» »ç¿ëÇÕ´Ï´Ù.\n");
+			}
+		}
+	}
 
 	// Create the charset renderer
 	if (_platform == Common::kPlatformNES)
@@ -2310,6 +2354,19 @@ int ScummEngine::scummLoop(int delta) {
 	_talkDelay -= delta;
 	if (_talkDelay < 0)
 		_talkDelay = 0;
+
+	for(int numb = 0; numb < MAX_KOR; numb++) {
+		if (_strKSet1[numb].delay != -1) { // kor
+			_strKSet1[numb].delay -= delta;
+			if (_strKSet1[numb].delay < 0)
+				_strKSet1[numb].delay = 0;
+		}
+		if (_strKDesc[numb].delay != -1) { // kor
+			_strKDesc[numb].delay -= 5;
+			if (_strKDesc[numb].delay < 0)
+				_strKDesc[numb].delay = 0;
+		}
+	}
 
 	// Record the current ego actor before any scripts (including input scripts)
 	// get a chance to run.

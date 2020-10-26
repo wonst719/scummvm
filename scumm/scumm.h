@@ -1184,13 +1184,23 @@ public:
 
 	// Somewhat hackish stuff for 2 byte support (Chinese/Japanese/Korean)
 	bool _useCJKMode;
+	bool _useMultiFont;
+	int _numLoadedFont;
+	int _currentFont;
 	int _2byteHeight;
 	int _2byteWidth;
+	int _2byteShadow;
+	void loadCJKFonts();
 	byte *get2byteCharPtr(int idx);
 
-protected:
+	byte *_2byteMultiFontPtr[20];
 	byte *_2byteFontPtr;
 
+	int _2byteMultiHeight[20];
+	int _2byteMultiWidth[20];
+	int _2byteMultiShadow[20];
+
+protected:
 	uint32 fileReadDword();
 
 public:

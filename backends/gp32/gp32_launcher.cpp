@@ -42,9 +42,9 @@ char *oplTable[3] = {"LOW", "MEDIUM", "HIGH"};
 uint16 sampleTable[3] = {11025, 22050, 44100};
 
 uint8 maxTable[5] = {15, 16, 3, 3, 2};
-uint8 currentSetting[5] = {3, 5, 1, 0, 0};
+uint8 currentSetting[5] = {2, 5, 1, 0, 0};
 
-int g_cpuSpeed = 120;
+int g_cpuSpeed = 100;
 int g_gammaRamp = 100;
 
 void configMenu() {

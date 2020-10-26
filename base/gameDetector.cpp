@@ -158,6 +158,10 @@ GameDetector::GameDetector() {
 #ifndef DISABLE_SCUMM
 	ConfMan.registerDefault("demo_mode", false);
 	ConfMan.registerDefault("tempo", 0);
+
+	ConfMan.registerDefault("v1_korean_mode", false);
+	ConfMan.registerDefault("v1_korean_only", false);
+	ConfMan.registerDefault("v1_highres_game", false);
 #endif
 
 #if !defined(DISABLE_SKY) || !defined(DISABLE_QUEEN)

@@ -32,6 +32,8 @@
 #include "common/savefile.h"
 #include "common/config-manager.h"
 
+#include "scumm/korean.h"
+
 static const OSystem::GraphicsMode s_supportedGraphicsModes[] = {
 	{0, 0, 0}
 };
@@ -207,6 +209,39 @@ void OSystem_GP32::updateScreen() {
 	uint16 *buffer;
 	//TODO: adjust shakePos
 
+	Scumm::_kPalette = _currentPalette;
+	// Nasty hack의 시작
+	register int numb;
+	if(Scumm::_koreanMode) {
+		for(numb = 0; numb < MAX_KOR; numb++)// CHARSET_1
+			if(Scumm::_strKSet1[numb].delay == 0) {
+				Scumm::_strKSet1[numb].buffer[0] = Scumm::_strKSet1[numb].buffer[1] = 0;
+				if(Scumm::_strKSet1[numb].remainflag == 1)
+					Scumm::_strKSet1[numb].remainend = 1;
+				Scumm::_strKSet1[numb].remainflag = 0;
+			}
+
+		for(numb = 0; numb < MAX_KOR; numb++)// DESC
+			if(Scumm::_strKDesc[numb].delay <= 0) {
+				Scumm::_strKDesc[numb].buffer[0] = Scumm::_strKDesc[numb].buffer[1] = 0;
+				if(Scumm::_strKDesc[numb].remainflag == 1)
+					Scumm::_strKDesc[numb].remainend = 1;
+				Scumm::_strKDesc[numb].remainflag = 0;
+			}
+
+		for(numb = 0; numb < MAX_KOR; numb++) // CHARSET_1
+			if (Scumm::_strKSet1[numb].remainstart || Scumm::_strKSet1[numb].remainend) {
+				if(Scumm::_strKSet1[numb].remainstart) Scumm::_strKSet1[numb].remainstart = 0;
+				if(Scumm::_strKSet1[numb].remainend) Scumm::_strKSet1[numb].remainend = 0;
+			}
+
+		for(numb = 0; numb < MAX_KOR; numb++) // DESC
+			if (Scumm::_strKDesc[numb].remainstart || Scumm::_strKDesc[numb].remainend) {
+				if(Scumm::_strKDesc[numb].remainstart) Scumm::_strKDesc[numb].remainstart = 0;
+				if(Scumm::_strKDesc[numb].remainend) Scumm::_strKDesc[numb].remainend = 0;
+			}
+	}
+
 	// draw gamescreen
 	buffer = &_tmpScreen[240 - _screenHeight];
 	for (int x = 0; x < _screenWidth; x++) {
@@ -215,7 +250,48 @@ void OSystem_GP32::updateScreen() {
 		}
 		buffer += 240 - _screenHeight;
 	}
-	
+
+			//1x 모드
+			if(Scumm::_koreanMode) {
+				uint16 korColor;
+				for(numb = 0; numb < MAX_KOR ; numb++) {
+					if(Scumm::_strKSet1[numb].remainflag) {
+						korColor = _currentPalette[Scumm::_strKSet1[numb].color];
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_tmpScreen, Scumm::_strKSet1[numb].xpos, Scumm::_strKSet1[numb].ypos,
+									320, 200, korColor, Scumm::_strKSet1[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_tmpScreen, 1, 1,
+									320, 200, korColor, Scumm::_strKSet1[numb].buffer);
+					}
+				}
+				for(numb = 0; numb < MAX_KOR; numb++) {
+					if(Scumm::_strKDesc[numb].remainflag) {
+						korColor = _currentPalette[Scumm::_strKDesc[numb].color];
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_tmpScreen, Scumm::_strKDesc[numb].xpos, Scumm::_strKDesc[numb].ypos,
+									320, 200, korColor, Scumm::_strKDesc[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_tmpScreen, 1, 1,
+									320, 200, korColor, Scumm::_strKDesc[numb].buffer);
+					}
+				}
+				for(numb = 0; numb < MAX_KOR; numb++) {
+					if(Scumm::_strKSmush[numb].remain) {
+		//				korColor = RGBToColor(255,255,255);
+						korColor = _currentPalette[1];
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_tmpScreen, Scumm::_strKSmush[numb].xpos, Scumm::_strKSmush[numb].ypos,
+									320, 200, korColor, Scumm::_strKSmush[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_tmpScreen, 1, 1,
+									320, 200, korColor, Scumm::_strKSmush[numb].buffer);
+						Scumm::_strKSmush[numb].buffer[0] = Scumm::_strKSmush[numb].buffer[1] = 0;
+					}
+				}
+			}
+// HACK
+
 	// draw overlay
 	if (_overlayVisible) {
 		buffer = &_tmpScreen[240 - _overlayHeight];
@@ -244,10 +320,10 @@ void OSystem_GP32::updateScreen() {
 		
 	//TODO: draw softkeyboard
 
-	gp_flipScreen();
-	_hwScreen = frameBuffer1;
-	_tmpScreen = frameBuffer2;
-	//memcpy(_hwScreen, _tmpScreen, LCD_WIDTH * LCD_HEIGHT * sizeof(uint16));
+	//gp_flipScreen();
+	//_hwScreen = frameBuffer1;
+	//_tmpScreen = frameBuffer2;
+	memcpy(_hwScreen, _tmpScreen, LCD_WIDTH * LCD_HEIGHT * sizeof(uint16));
 }
 
 void OSystem_GP32::setShakePos(int shakeOffset) {
@@ -478,6 +554,11 @@ bool OSystem_GP32::pollEvent(Event &event) {
 			event.kbd.keycode = event.kbd.ascii = 32;
 			return true;
 		}
+		if (ev.button == GPC_VK_FL) {
+			event.type = EVENT_KEYDOWN;
+			event.kbd.keycode = event.kbd.ascii = '0';
+			return true;
+		}
 		if (ev.button == GPC_VK_FR) { // R = ESC
 			event.type = EVENT_KEYDOWN;
 			event.kbd.keycode = event.kbd.ascii = 27;
@@ -543,6 +624,11 @@ bool OSystem_GP32::pollEvent(Event &event) {
 		if (ev.button == GPC_VK_SELECT) {
 			event.type = EVENT_KEYUP;
 			event.kbd.keycode = event.kbd.ascii = 32;
+			return true;
+		}
+		if (ev.button == GPC_VK_FL) {
+			event.type = EVENT_KEYUP;
+			event.kbd.keycode = event.kbd.ascii = '0';
 			return true;
 		}
 		if (ev.button == GPC_VK_FR) {

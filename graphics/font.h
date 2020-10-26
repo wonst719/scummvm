@@ -23,6 +23,9 @@
 
 #include "common/str.h"
 #include "graphics/surface.h"
+#ifndef __GP32__
+#include "graphics/korfont.h"
+#endif
 
 namespace Graphics {
 
@@ -46,8 +49,8 @@ public:
 	virtual int getFontHeight() const = 0;
 	virtual int getMaxCharWidth() const = 0;
 
-	virtual int getCharWidth(byte chr) const = 0;
-	virtual void drawChar(Surface *dst, byte chr, int x, int y, uint32 color) const = 0;
+	virtual int getCharWidth(uint16 chr) const = 0;
+	virtual void drawChar(Surface *dst, uint16 chr, int x, int y, uint32 color) const = 0;
 
 	void drawString(Surface *dst, const Common::String &str, int x, int y, int w, uint32 color, TextAlignment align = kTextAlignLeft, int deltax = 0, bool useEllipsis = true) const;
 
@@ -78,8 +81,8 @@ public:
 	virtual int getFontHeight() const { return 8; }
 	virtual int getMaxCharWidth() const { return 8; };
 
-	virtual int getCharWidth(byte chr) const;
-	virtual void drawChar(Surface *dst, byte chr, int x, int y, uint32 color) const;
+	virtual int getCharWidth(uint16 chr) const;
+	virtual void drawChar(Surface *dst, uint16 chr, int x, int y, uint32 color) const;
 };
 
 
@@ -112,8 +115,8 @@ public:
 	virtual int getFontHeight() const { return desc.height; }
 	virtual int getMaxCharWidth() const { return desc.maxwidth; };
 
-	virtual int getCharWidth(byte chr) const;
-	virtual void drawChar(Surface *dst, byte chr, int x, int y, uint32 color) const;
+	virtual int getCharWidth(uint16 chr) const;
+	virtual void drawChar(Surface *dst, uint16 chr, int x, int y, uint32 color) const;
 };
 
 #if (defined(PALMOS_ARM) || defined(PALMOS_DEBUG) || defined(__GP32__))

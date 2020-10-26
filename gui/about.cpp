@@ -46,8 +46,8 @@ enum {
 // an amount by which that line shall be indented (the indent of course would have
 // to be considered while performing any word wrapping, too).
 static const char *credits_intro[] = {
-"\\C""Copyright (C) 2002-2005 The ScummVM project",
-"\\C""http://www.scummvm.org",
+"\\C""Copyright (C) 2002-2005 The ScummVM Kor. project",
+"\\C""http://scummkor.kldp.net",
 "\\C""",
 "\\C""LucasArts SCUMM Games (C) LucasArts",
 "\\C""Humongous SCUMM Games (C) Humongous",

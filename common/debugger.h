@@ -56,6 +56,7 @@ protected:
 		DVAR_INT,
 		DVAR_BOOL,
 		DVAR_INTARRAY,
+		DVAR_BITARRAY,
 		DVAR_STRING
 	};
 

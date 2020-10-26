@@ -6,6 +6,7 @@ MODULE_OBJS := \
 	graphics/font.o \
 	graphics/fontman.o \
 	graphics/ilbm.o \
+	graphics/korfont.o \
 	graphics/newfont.o \
 	graphics/newfont_big.o \
 	graphics/primitives.o \

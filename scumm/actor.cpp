@@ -36,6 +36,8 @@
 #include "scumm/usage_bits.h"
 #include "scumm/util.h"
 
+#include "scumm/korean.h"
+
 namespace Scumm {
 
 byte Actor::kInvalidBox = 0;
@@ -1360,6 +1362,7 @@ void ScummEngine_v7::actorTalk(const byte *msg) {
 	}
 	_charsetBufPos = 0;
 	_talkDelay = 0;
+	INIT_KOR_DELAYS;
 	_haveMsg = 1;
 	if (_version == 7)
 		VAR(VAR_HAVE_MSG) = 0xFF;
@@ -1427,6 +1430,7 @@ void ScummEngine::actorTalk(const byte *msg) {
 	}
 	_charsetBufPos = 0;
 	_talkDelay = 0;
+	INIT_KOR_DELAYS;
 	_haveMsg = 0xFF;
 	VAR(VAR_HAVE_MSG) = 0xFF;
 	if (VAR_CHARCOUNT != 0xFF)
@@ -1460,6 +1464,7 @@ void ScummEngine::stopTalk() {
 
 	_haveMsg = 0;
 	_talkDelay = 0;
+	INIT_KOR_DELAYS;
 
 	act = getTalkingActor();
 	if (act && act < 0x80) {

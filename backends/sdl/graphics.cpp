@@ -27,6 +27,8 @@
 #include "graphics/fontman.h"
 #include "graphics/surface.h"
 
+#include "scumm/korean.h"
+
 static const OSystem::GraphicsMode s_supportedGraphicsModes[] = {
 	{"1x", "Normal (no scaling)", GFX_NORMAL},
 	{"2x", "2x", GFX_DOUBLESIZE},
@@ -547,6 +549,47 @@ void OSystem_SDL::internUpdateScreen() {
 		_forceFull = true;
 	}
 
+	// Nasty hack의 시작
+	register int numb;
+	if(Scumm::_koreanMode) {
+		for(numb = 0; numb < MAX_KOR; numb++)// CHARSET_1
+			if(Scumm::_strKSet1[numb].delay == 0) {
+				Scumm::_strKSet1[numb].buffer[0] = Scumm::_strKSet1[numb].buffer[1] = 0;
+				if(Scumm::_strKSet1[numb].remainflag == 1)
+					Scumm::_strKSet1[numb].remainend = 1;
+				Scumm::_strKSet1[numb].remainflag = 0;
+			}
+		
+		for(numb = 0; numb < MAX_KOR; numb++)// DESC
+			if(Scumm::_strKDesc[numb].delay <= 0) {
+				Scumm::_strKDesc[numb].buffer[0] = Scumm::_strKDesc[numb].buffer[1] = 0;
+				if(Scumm::_strKDesc[numb].remainflag == 1)
+					Scumm::_strKDesc[numb].remainend = 1;
+				Scumm::_strKDesc[numb].remainflag = 0;
+			}
+	
+		for(numb = 0; numb < MAX_KOR; numb++) // CHARSET_1
+			if (Scumm::_strKSet1[numb].remainstart || Scumm::_strKSet1[numb].remainend) {
+				_forceFull = 1;
+				Scumm::_kPalette = _currentPalette;
+				if(Scumm::_strKSet1[numb].remainstart) Scumm::_strKSet1[numb].remainstart = 0;
+				if(Scumm::_strKSet1[numb].remainend) Scumm::_strKSet1[numb].remainend = 0;
+			}
+
+		for(numb = 0; numb < MAX_KOR; numb++) // DESC
+			if (Scumm::_strKDesc[numb].remainstart || Scumm::_strKDesc[numb].remainend) {
+				_forceFull = 1;
+				Scumm::_kPalette = _currentPalette;
+				if(Scumm::_strKDesc[numb].remainstart) Scumm::_strKDesc[numb].remainstart = 0;
+				if(Scumm::_strKDesc[numb].remainend) Scumm::_strKDesc[numb].remainend = 0;
+			}
+	}
+
+	//화면이 안바뀌며 한글 출력될 문장이 있을 때 강제로 풀 리드로우...(SMUSH)
+	for(numb = 0; numb < MAX_KOR; numb++)
+		if ((!_numDirtyRects) && Scumm::_strKSmush[numb].buffer[0] && Scumm::_strKSmush[numb].remain)
+			_forceFull = 1;
+
 	// Check whether the palette was changed in the meantime and update the
 	// screen surface accordingly.
 	if (_paletteDirtyEnd != 0) {
@@ -611,6 +654,18 @@ void OSystem_SDL::internUpdateScreen() {
 	// Only draw anything if necessary
 	if (_numDirtyRects > 0) {
 
+		for(numb = 0; numb < MAX_KOR; numb++) { //SMUSH
+			if (Scumm::_strKSmush[numb].remain) {
+				_numDirtyRects = 1;
+				_dirtyRectList[0].x = 0;
+				_dirtyRectList[0].y = 0;
+				_dirtyRectList[0].w = _screenWidth;
+				_dirtyRectList[0].h = _screenHeight; // 풀 리드로우
+				Scumm::_kPalette = _currentPalette;
+				if(!Scumm::_strKSmush[numb].buffer[0]) Scumm::_strKSmush[numb].remain=0;
+			}
+		}
+
 		SDL_Rect *r;
 		SDL_Rect dst;
 		uint32 srcPitch, dstPitch;
@@ -624,6 +679,52 @@ void OSystem_SDL::internUpdateScreen() {
 				if (SDL_BlitSurface(origSurf, r, _hwscreen, &dst) != 0)
 					error("SDL_BlitSurface failed: %s", SDL_GetError());
 			}
+// HACK
+			//1x 모드
+			if(Scumm::_koreanMode) {
+				SDL_Surface *_krscreen = _hwscreen;
+				uint16 korColor;
+				for(numb = 0; numb < MAX_KOR ; numb++) {
+					if(Scumm::_strKSet1[numb].remainflag) {
+						korColor = RGBToColor(	_currentPalette[Scumm::_strKSet1[numb].color].r,
+												_currentPalette[Scumm::_strKSet1[numb].color].g,
+												_currentPalette[Scumm::_strKSet1[numb].color].b);
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_krscreen, Scumm::_strKSet1[numb].xpos, Scumm::_strKSet1[numb].ypos,
+									320, 200, korColor, Scumm::_strKSet1[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_krscreen, 1, 1,
+									320, 200, korColor, Scumm::_strKSet1[numb].buffer);
+					}
+				}
+				for(numb = 0; numb < MAX_KOR; numb++) {
+					if(Scumm::_strKDesc[numb].remainflag) {
+						korColor = RGBToColor(	_currentPalette[Scumm::_strKDesc[numb].color].r,
+												_currentPalette[Scumm::_strKDesc[numb].color].g,
+												_currentPalette[Scumm::_strKDesc[numb].color].b);
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_krscreen, Scumm::_strKDesc[numb].xpos, Scumm::_strKDesc[numb].ypos,
+									320, 200, korColor, Scumm::_strKDesc[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_krscreen, 1, 1,
+									320, 200, korColor, Scumm::_strKDesc[numb].buffer);
+					}
+				}
+				for(numb = 0; numb < MAX_KOR; numb++) {
+					if(Scumm::_strKSmush[numb].remain) {
+		//				korColor = RGBToColor(255,255,255);
+						korColor = RGBToColor(_currentPalette[1].r, _currentPalette[1].g, _currentPalette[1].b);
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_krscreen, Scumm::_strKSmush[numb].xpos, Scumm::_strKSmush[numb].ypos,
+									320, 200, korColor, Scumm::_strKSmush[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_krscreen, 1, 1,
+									320, 200, korColor, Scumm::_strKSmush[numb].buffer);
+						Scumm::_strKSmush[numb].buffer[0] = Scumm::_strKSmush[numb].buffer[1] = 0;
+					}
+				}
+			}
+// HACK
 		} else {
 			for (r = _dirtyRectList; r != lastRect; ++r) {
 				dst = *r;
@@ -633,6 +734,51 @@ void OSystem_SDL::internUpdateScreen() {
 				if (SDL_BlitSurface(origSurf, r, srcSurf, &dst) != 0)
 					error("SDL_BlitSurface failed: %s", SDL_GetError());
 			}
+// HACK
+			if(Scumm::_koreanMode) {
+				SDL_Surface *_krscreen = _tmpscreen;
+				uint16 korColor;
+				for(numb = 0; numb < MAX_KOR ; numb++) {
+					if(Scumm::_strKSet1[numb].remainflag) {
+						korColor = RGBToColor(	_currentPalette[Scumm::_strKSet1[numb].color].r,
+												_currentPalette[Scumm::_strKSet1[numb].color].g,
+												_currentPalette[Scumm::_strKSet1[numb].color].b);
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_krscreen, Scumm::_strKSet1[numb].xpos, Scumm::_strKSet1[numb].ypos,
+									(Scumm::_highRes ? 640 : 320), 200, korColor, Scumm::_strKSet1[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_krscreen, 1, 1,
+									(Scumm::_highRes ? 640 : 320), 200, korColor, Scumm::_strKSet1[numb].buffer);
+					}
+				}
+				for(numb = 0; numb < MAX_KOR; numb++) {
+					if(Scumm::_strKDesc[numb].remainflag) {
+						korColor = RGBToColor(	_currentPalette[Scumm::_strKDesc[numb].color].r,
+												_currentPalette[Scumm::_strKDesc[numb].color].g,
+												_currentPalette[Scumm::_strKDesc[numb].color].b);
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_krscreen, Scumm::_strKDesc[numb].xpos, Scumm::_strKDesc[numb].ypos,
+									(Scumm::_highRes ? 640 : 320), 200, korColor, Scumm::_strKDesc[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_krscreen, 1, 1,
+									(Scumm::_highRes ? 640 : 320), 200, korColor, Scumm::_strKDesc[numb].buffer);
+					}
+				}
+				for(numb = 0; numb < MAX_KOR; numb++) {
+					if(Scumm::_strKSmush[numb].remain) {
+		//				korColor = RGBToColor(255,255,255);
+						korColor = RGBToColor(_currentPalette[1].r, _currentPalette[1].g, _currentPalette[1].b);
+						if(Scumm::_koreanOnly)
+							Scumm::putEmergencyFont(_krscreen, Scumm::_strKSmush[numb].xpos, Scumm::_strKSmush[numb].ypos,
+									(Scumm::_highRes ? 640 : 320), (Scumm::_highRes ? 480 : 200), korColor, Scumm::_strKSmush[numb].buffer);
+						else
+							Scumm::putEmergencyFont(_krscreen, 1, 1,
+									(Scumm::_highRes ? 640 : 320), (Scumm::_highRes ? 480 : 200), korColor, Scumm::_strKSmush[numb].buffer);
+						Scumm::_strKSmush[numb].buffer[0] = Scumm::_strKSmush[numb].buffer[1] = 0;
+					}
+				}
+			}
+// Nasty hack 끝
 
 			SDL_LockSurface(srcSurf);
 			SDL_LockSurface(_hwscreen);

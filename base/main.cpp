@@ -93,9 +93,9 @@
  * to setup, but I have no idea if/how one can also change files which are not
  * currently being commit'ed.
  */
-const char *gScummVMVersion = "0.9.0CVS";
+const char *gScummVMVersion = "0.4.2Kor";
 const char *gScummVMBuildDate = __DATE__ " " __TIME__;
-const char *gScummVMFullVersion = "ScummVM 0.9.0CVS (" __DATE__ " " __TIME__ ")";
+const char *gScummVMFullVersion = "ScummVM Kor. 0.4.2 (" __DATE__ " " __TIME__ ")";
 const char *gScummVMFeatures = ""
 #ifdef USE_TREMOR
 	"Tremor "
@@ -440,6 +440,11 @@ extern "C" int main(int argc, char *argv[]) {
 	// Set initial window caption
 	system.setWindowCaption(gScummVMFullVersion);
 
+#ifndef __GP32__
+	//KOR: 한글 폰트를 로드한다.
+	Graphics::loadKoreanGUIFont();
+#endif
+
 	// Unless a game was specified, show the launcher dialog
 	if (detector._targetName.isEmpty())
 		running = launcherDialog(detector, system);
@@ -474,6 +479,11 @@ extern "C" int main(int argc, char *argv[]) {
 
 		running = launcherDialog(detector, system);
 	}
+
+#ifndef __GP32__
+	//KOR: 한글 폰트를 언로드한다.
+	Graphics::unloadKoreanGUIFont();
+#endif
 
 	// ...and quit (the return 0 should never be reached)
 	delete Common::g_timer;
