@@ -337,6 +337,11 @@ void registerDefaults() {
 
 	ConfMan.registerDefault("fluidsynth_misc_interpolation", "4th");
 #endif
+
+	ConfMan.registerDefault("language", "kr");
+	ConfMan.registerDefault("subtitles", true);
+	ConfMan.registerDefault("v1_korean_mode", false);
+	ConfMan.registerDefault("v1_korean_only", false);
 }
 
 static bool parseGameName(const Common::String &gameName, Common::String &engineId, Common::String &gameId) {

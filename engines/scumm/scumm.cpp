@@ -86,6 +86,8 @@
 
 #include "audio/mixer.h"
 
+#include "scumm/korean.h"
+
 using Common::File;
 
 namespace Scumm {
@@ -613,7 +615,7 @@ ScummEngine::~ScummEngine() {
 	}
 
 	delete[] _sortedActors;
-
+	if (_koreanMode) unloadKoreanFiles();
 	delete[] _2byteFontPtr;
 	delete _charset;
 	delete _messageDialog;
@@ -1257,6 +1259,37 @@ Common::Error ScummEngine::init() {
 	// Load CJK font, if present
 	// Load it earlier so _useCJKMode variable could be set
 	loadCJKFont();
+
+	_koreanMode = 0;
+	_koreanOnly = 0;
+	_highRes = 0;
+	
+	if (_language == Common::KO_KOR) {
+		_koreanMode = ConfMan.getBool("v1_korean_mode");
+		_koreanOnly = ConfMan.getBool("v1_korean_only") && _koreanMode;
+		if ((_game.version == 8 || _game.heversion > 72) && _koreanMode)
+			_highRes = true;
+		if ((_game.id == GID_DIG || _game.id == GID_CMI) && _koreanMode) {
+			debug("You can not use V1 mode in this game");
+			_koreanMode = 0;
+			_koreanOnly = 0;
+			_highRes = 0;
+		}
+		if (_koreanMode) {
+			debug("Korean V1 translation mode.");
+			loadKoreanFiles(_game.gameid);
+			_useCJKMode = 1;	// Use both V1 and V2
+		} else {
+			if(_useCJKMode) {
+				debug("Korean V2 mode for DUMB edition or COMI Korean version");
+			}
+		}
+	}
+	debug("_game.id = %d", _game.id);
+	debug("_game.gameid = %s", _game.gameid);
+	debug("_game.version = %d, _game.heversion = %d", _game.version, _game.heversion);
+	debug("_koreanMode = %d, _koreanOnly = %d, _useCJKMode = %d", _koreanMode, _koreanOnly, _useCJKMode);
+	debug("_highRes = %d", _highRes);
 
 	// Initialize backend
 	if (_renderMode == Common::kRenderHercA || _renderMode == Common::kRenderHercG) {

@@ -1119,6 +1119,8 @@ protected:
 	virtual void CHARSET_1();
 	bool newLine();
 	void drawString(int a, const byte *msg);
+	void drawEnglish(int a, const byte *msg);
+	void drawKorean(const byte *buffer, uint16 kr_xpos, uint16 kr_ypos, uint8 kr_color, int option);
 	void fakeBidiString(byte *ltext, bool ignoreVerb);
 	void debugMessage(const byte *msg);
 	void showMessageDialog(const byte *msg);

@@ -96,6 +96,7 @@ public:
 	virtual int getCharWidth(uint16 chr) = 0;
 
 	virtual void setColor(byte color) { _color = color; translateColor(); }
+	virtual byte getColor() { return _color; }
 
 	void saveLoadWithSerializer(Common::Serializer &ser);
 };
