@@ -632,7 +632,6 @@ void SmushPlayer::handleTextResource(uint32 subType, int32 subSize, Common::Seek
 		str = string2;
 	}
 
-	char kr_color = (color != -1) ? color : 1;
 	const char *strKorean = str;
 
 	// flags:

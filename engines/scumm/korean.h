@@ -20,51 +20,18 @@
 #ifndef SCUMM_KOREAN_H
 #define SCUMM_KOREAN_H
 
-#include <string.h>
-
-//#include "common/scummsys.h"
-
-#if defined( __DS__ )
-#include <SDL.h>
-typedef SDL_Color K_Color;
-typedef SDL_Surface K_Surface;
-#else
-typedef uint16 K_Color;
-typedef uint16 K_Surface;
-#endif
-
 namespace Scumm {
 
-#ifndef ABS
-#define ABS(x) ((x) >= 0 ? (x) : -(x))
-#endif
-	
-#ifndef MIN
-#define	MIN(a,b) (((a) < (b)) ? (a) : (b))
-#endif
-	
-#ifndef MAX
-#define	MAX(a,b) (((a) > (b)) ? (a) : (b))
-#endif
-	
-#define MAX_KOR 32
+extern bool _koreanMode;
+extern bool _koreanOnly;
+extern bool _highRes;
 
-	extern bool _koreanMode;
-	extern bool _koreanOnly;
-	extern bool _highRes;
+extern void loadKoreanFiles(const char *id);
+extern void unloadKoreanFiles();
 
-	extern K_Color *_kPalette;
-	extern void putEmergencyFont(K_Surface *screen, int xpos, int ypos, int scrw, int scrh, uint16 color, const char *buffer);
+extern char *convertToKorean(const char *buf, bool descFlag);
+extern char *convertToKoreanValid(const char *buf, bool descFlag);
 
-	extern void loadKoreanFiles(const char *id);
-	extern void unloadKoreanFiles();
-
-	extern char *convertToKorean(const char *buf, bool descFlag);
-	extern char *convertToKoreanValid(const char *buf, bool descFlag);
-	extern void addKString(char *buf, uint16 xpos, uint16 ypos, short delay, uint8 col);
-	extern void addKDesc(char *buf, uint16 xpos, uint16 ypos, short delay, uint8 col);
-	extern void addKSmush(char *buf, long xpos, long ypos, uint8 col);
-	
 } // End of namespace Scumm
 
 #endif
