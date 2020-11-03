@@ -1,5 +1,8 @@
-/* ScummVM - Scumm Interpreter
- * Copyright (C) 2002-2004 The ScummVM Kor. Project
+/* ScummVM - Graphic Adventure Engine
+ *
+ * ScummVM is the legal property of its developers, whose names
+ * are too numerous to list here. Please refer to the COPYRIGHT
+ * file distributed with this source distribution.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -13,10 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * $Header: /cvsroot/scummkor/scummvm-kor/scumm/korean.h,v 1.4 2004/08/08 04:49:53 wonst719 Exp $
  */
+
 #ifndef SCUMM_KOREAN_H
 #define SCUMM_KOREAN_H
 
